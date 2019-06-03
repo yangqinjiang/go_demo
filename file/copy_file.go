@@ -5,7 +5,9 @@ import (
 	"io"
 	"os"
 )
-
+/**
+copy_file_command src.txt dst.txt
+ */
 func main() {
 	list := os.Args//获取命令行参数
 	if len(list) != 3{
