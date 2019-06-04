@@ -11,7 +11,7 @@ func main() {
 	//消费者,从channel读取内容
 	//新建协程
 	go func() {
-		for i:=0;i<20;i++{
+		for i:=0;i<10;i++{
 			num := <-ch
 			fmt.Print(num," ")
 		}
