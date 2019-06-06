@@ -29,6 +29,7 @@ func main() {
 
 //接收用户的请求
 func HandleConn(conn net.Conn) {
+	defer conn.Close()                     //关闭当前用户的连接
 	//获取客户端的网络地址信息
 	addr := conn.RemoteAddr().String();
 	fmt.Println(addr," connect successful ",addr)
@@ -42,15 +43,19 @@ func HandleConn(conn net.Conn) {
 			return
 		}
 		txt := strings.TrimSpace(string(buf[:n]))
-		//defer conn.Close()                     //关闭当前用户的连接
-		fmt.Println("[%s] :%s ",addr ,txt ) //切片
+
+		fmt.Printf("[%s] :%s\n",addr ,txt ) //切片
 		//转成小写,并删除换行符号
-		if "exit" == strings.Trim(strings.ToLower(txt),"\n"){
-			fmt.Println(addr," exit")
+		if "exit" == strings.Trim(strings.ToLower(txt),"\r\n"){
+			fmt.Println(addr," exit....")
 			return
 		}
 		//把数据转换为大写,再给用户发送
-		conn.Write([]byte(strings.ToUpper(txt) + "Done"))
+		_,err2 :=conn.Write([]byte(strings.ToUpper(txt)))
+		if nil != err2{
+			fmt.Println("请求网络错误~")
+			return
+		}
 
 	}
 }
